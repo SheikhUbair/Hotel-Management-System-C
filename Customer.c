@@ -1,4 +1,5 @@
 #include<stdio.h>
+
 struct Customer
 {
     char cust_name[50];
@@ -9,7 +10,7 @@ struct Customer
     char cust_Purpose[10];
     char cust_arrivalDATE[12];
 };
-
+void addcust_file(struct Customer cust);
 
 int main()
 {
@@ -54,6 +55,25 @@ fgets(cust.cust_Purpose,sizeof(cust.cust_Purpose),stdin);
 
 printf("Enter the Date of arrival of the Customer : ");
 fgets(cust.cust_arrivalDATE,sizeof(cust.cust_arrivalDATE),stdin);
+ 
+addcust_file(cust);
 
 return 0;
+}
+void addcust_file(struct Customer cust)
+{
+    FILE *fp; 
+
+fp = fopen("Customer.dat", "ab");
+
+if(fp==NULL)
+{
+    printf("Unable to open file!\n");
+    return;
+}
+fwrite(&cust, sizeof(struct Customer), 1, fp);
+
+fclose(fp);
+
+printf("Customer saved Successfully.");
 }

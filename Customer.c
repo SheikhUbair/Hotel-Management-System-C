@@ -11,6 +11,7 @@ struct Customer
     char cust_arrivalDATE[12];
 };
 void addcust_file(struct Customer cust);
+void view_cust(struct Customer cust);
 
 int main()
 {
@@ -76,4 +77,29 @@ fwrite(&cust, sizeof(struct Customer), 1, fp);
 fclose(fp);
 
 printf("Customer saved Successfully.");
+}
+void view_cust(struct Customer cust)
+{
+    struct Customer cust;
+
+    FILE *fp;
+    fp= fopen("Customer.dat", "rb");
+
+    if(fp==NULL)
+    {
+        printf("Unable to open the File!");
+        return;
+    }
+    while(fread(&cust, sizeof(struct Customer),1,fp)==1)
+    {
+        int count=1;
+    printf("Name of Customer %d : %s\n",count,cust.cust_name);
+    printf("ID of Customer %d : %s\n",count,cust.cust_ID);
+    printf("Address of Customer %d : %s\n",count,cust.cust_Address);
+    printf("Room assigned to customer %d : %d\n",count,cust.cust_Room);
+    printf("No of Persons with Customer %d : %d\n",count,cust.cust_NoOfPerson);
+    printf("Purpose of visit of Customer %d : %s\n",count,cust.cust_Purpose);
+    printf("Arrival Date of Customer %d at the Hotel : %s\n",count,cust.cust_arrivalDATE);
+
+    }
 }

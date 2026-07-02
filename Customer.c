@@ -1,5 +1,5 @@
 #include<stdio.h>
-
+#include "Customer.h"
 struct Customer
 {
     char cust_name[50];
@@ -11,14 +11,15 @@ struct Customer
     char cust_arrivalDATE[12];
 };
 void addcust_file(struct Customer cust);
-void view_cust(struct Customer cust);
+void view_cust();
+void add_Customer();
 
-int main()
+void add_Customer()
 {
 struct Customer cust;
 int male, fem, child;
 
-printf("Enter the details of the Customer : \n");
+printf("\n----------Enter the details of the Customer-----------\n");
 
 printf("Customer Name : ");
 fgets(cust.cust_name,sizeof(cust.cust_name),stdin);
@@ -56,10 +57,9 @@ fgets(cust.cust_Purpose,sizeof(cust.cust_Purpose),stdin);
 
 printf("Enter the Date of arrival of the Customer : ");
 fgets(cust.cust_arrivalDATE,sizeof(cust.cust_arrivalDATE),stdin);
- 
-addcust_file(cust);
 
-return 0;
+addcust_file(cust);
+ 
 }
 void addcust_file(struct Customer cust)
 {
@@ -76,9 +76,9 @@ fwrite(&cust, sizeof(struct Customer), 1, fp);
 
 fclose(fp);
 
-printf("Customer saved Successfully.");
+printf("Customer saved Successfully.\n");
 }
-void view_cust(struct Customer cust)
+void view_cust()
 {
     struct Customer cust;
 
@@ -90,16 +90,19 @@ void view_cust(struct Customer cust)
         printf("Unable to open the File!");
         return;
     }
+      int count=1;
     while(fread(&cust, sizeof(struct Customer),1,fp)==1)
     {
-        int count=1;
-    printf("Name of Customer %d : %s\n",count,cust.cust_name);
-    printf("ID of Customer %d : %s\n",count,cust.cust_ID);
-    printf("Address of Customer %d : %s\n",count,cust.cust_Address);
+    printf("\n---------------Details of Customer %d------------------\n",count);
+    printf("Name of Customer %d : %s",count,cust.cust_name);
+    printf("ID of Customer %d : %s",count,cust.cust_ID);
+    printf("Address of Customer %d : %s",count,cust.cust_Address);
     printf("Room assigned to customer %d : %d\n",count,cust.cust_Room);
     printf("No of Persons with Customer %d : %d\n",count,cust.cust_NoOfPerson);
-    printf("Purpose of visit of Customer %d : %s\n",count,cust.cust_Purpose);
-    printf("Arrival Date of Customer %d at the Hotel : %s\n",count,cust.cust_arrivalDATE);
-
+    printf("Purpose of visit of Customer %d : %s",count,cust.cust_Purpose);
+    printf("Arrival Date of Customer %d at the Hotel : %s",count,cust.cust_arrivalDATE);
+    printf("\n");
+    count++;
     }
+    fclose(fp);
 }

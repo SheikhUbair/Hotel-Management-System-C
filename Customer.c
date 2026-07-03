@@ -1,18 +1,13 @@
 #include<stdio.h>
 #include "Customer.h"
-struct Customer
-{
-    char cust_name[50];
-    char cust_ID[10];
-    char cust_Address[200];
-    int cust_Room;
-    int cust_NoOfPerson;
-    char cust_Purpose[10];
-    char cust_arrivalDATE[12];
-};
+
+
 void addcust_file(struct Customer cust);
 void view_cust();
 void add_Customer();
+int roomOccupied(int room);
+
+
 
 void add_Customer()
 {
@@ -30,8 +25,20 @@ fgets(cust.cust_ID,sizeof(cust.cust_ID),stdin);
 printf("Enter the Customer Adress : ");
 fgets(cust.cust_Address,sizeof(cust.cust_Address),stdin);
 
+while(1)
+{
 printf("Enter the Room assigned to Customer : ");
 scanf(" %d",&cust.cust_Room);
+
+if(roomOccupied(cust.cust_Room))
+{
+    printf("Room is already occupied ! Please choose another Room\n");
+}
+else
+{
+    break;
+}
+}
 
 while(1)
 {
@@ -105,4 +112,27 @@ void view_cust()
     count++;
     }
     fclose(fp);
+}
+
+int roomOccupied(int room)
+{
+    struct Customer cust;
+
+    FILE *fp;
+    fp=fopen("Customer.dat", "rb");
+
+    if(fp==NULL)
+    {
+        return 0;
+    }
+    while(fread(&cust,sizeof(struct Customer),1,fp)==1)
+    {
+        if(cust.cust_Room==room)
+        {
+            fclose(fp);
+            return 1;
+        }
+    }
+    fclose(fp);
+    return 0;
 }

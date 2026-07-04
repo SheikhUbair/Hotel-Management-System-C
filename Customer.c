@@ -6,7 +6,8 @@ void addcust_file(struct Customer cust);
 void view_cust();
 void add_Customer();
 int roomOccupied(int room);
-
+void Search_Customer();
+void Update_Room();
 
 
 void add_Customer()
@@ -135,4 +136,116 @@ int roomOccupied(int room)
     }
     fclose(fp);
     return 0;
+}
+
+void Search_Customer()
+{
+    struct Customer cust;
+    int search_room;
+    int found = 0;
+
+    printf("Enter the Room Number to be Searched : ");
+    scanf("%d",&search_room);
+
+    FILE *fp;
+    fp=fopen("Customer.dat", "rb");
+
+    if(fp==NULL)
+    {
+        printf("File unable to open !\n");
+        return;
+    }
+    while(fread(&cust,sizeof(struct Customer),1,fp)==1)
+    {
+        if(cust.cust_Room==search_room)
+        {
+            printf("\nName of Customer : %s",cust.cust_name);
+            printf("ID of Customer : %s",cust.cust_ID);
+            printf("Address of Customer : %s",cust.cust_Address);
+            printf("Room assigned to Customer : %d\n",cust.cust_Room);
+            printf("No. of perons with The Customer : %d\n",cust.cust_NoOfPerson);
+            printf("Purpose of visit of Customer : %s",cust.cust_Purpose);
+            printf("Arrival Date of the Customer : %s",cust.cust_arrivalDATE);
+            found=1;
+            break;
+        }
+    }
+    if(found==0)
+    {
+        printf("Room not found !\n");
+    }
+
+    fclose(fp);
+
+}
+
+void Update_Room()
+{
+    struct Customer cust;
+    int new_Room;
+    int old_Room;
+    int found=0;
+
+    printf("Room no. to be Updated : ");
+    scanf("%d",&old_Room);
+
+    while(1)
+    {
+    printf("Room %d Updated to : ",old_Room);
+    scanf("%d",&new_Room);
+    if(roomOccupied(new_Room))
+    {
+        printf("Room already occupied ! Please choose another room\n");
+    }
+    else
+    {
+        break;
+    }
+    }
+
+    FILE *fp;
+    FILE *tp;
+
+    fp=fopen("Customer.dat","rb");
+    tp=fopen("temp.dat","wb");
+
+    if(fp==NULL)
+    {
+        printf("Unable to open file ! \n");
+        return;
+    }
+    else if(tp==NULL)
+    {
+        printf("Unable to open file!\n");
+        return;
+    }
+
+    while(fread(&cust,sizeof(struct Customer),1,fp)==1)
+    {
+        if(cust.cust_Room!=old_Room)
+        {
+            fwrite(&cust, sizeof(struct Customer), 1, tp);
+        }
+        else if(cust.cust_Room==old_Room)
+        {
+            found=1;
+            cust.cust_Room=new_Room;
+            fwrite(&cust, sizeof(struct Customer),1,tp);
+        }
+    }
+   
+    fclose(fp);
+    fclose(tp);
+
+     if(found==0)
+    {
+        remove("temp.dat");
+        printf("Room not found !\n");
+    }
+    else
+    {
+        remove("Customer.dat");
+        rename("temp.dat", "Customer.dat");
+        printf("Room updated Successfully!\n");
+    }
 }

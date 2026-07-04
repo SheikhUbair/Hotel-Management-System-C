@@ -12,7 +12,7 @@ while(1)
     printf("\n1. Add Customer\n");
     printf("2. View all customers\n");
     printf("3. Search Customer\n");
-    printf("4. Update Customer Details\n");
+    printf("4. Update Room \n");
     printf("5. Delete a customer\n");
     printf("6. Book room\n");
     printf("7. View Room status\n");
@@ -33,6 +33,16 @@ while(1)
         case 2:
         {
             view_cust();
+            break;
+        }
+        case 3:
+        {
+            Search_Customer();
+            break;
+        }
+        case 4:
+        {
+            Update_Room();
             break;
         }
     }

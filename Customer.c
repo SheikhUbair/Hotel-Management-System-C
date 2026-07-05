@@ -1,5 +1,6 @@
 #include<stdio.h>
 #include "Customer.h"
+#include <string.h>
 
 
 void addcust_file(struct Customer cust);
@@ -8,6 +9,7 @@ void add_Customer();
 int roomOccupied(int room);
 void Search_Customer();
 void Update_Room();
+void Delete_Customer();
 
 
 void add_Customer()
@@ -247,5 +249,61 @@ void Update_Room()
         remove("Customer.dat");
         rename("temp.dat", "Customer.dat");
         printf("Room updated Successfully!\n");
+    }
+}
+
+void Delete_Customer()
+{
+    struct Customer cust;
+    char dele_cust [50];
+    int found=0;
+
+    printf("Customer That needs to be deleted : ");
+     getchar();
+    fgets(dele_cust,sizeof(dele_cust),stdin);
+    dele_cust[strcspn(dele_cust,"\n")]='\0'; // gets rid of newline
+   
+    FILE *fp;
+    FILE *tp;
+
+    fp=fopen("Customer.dat","rb");
+    tp=fopen("temp.dat", "wb");
+
+    if(fp==NULL)
+    {
+        printf("Unable to open file ! \n");
+        return;
+    }
+    else if(tp==NULL)
+    {
+        printf("Unable to open file ! \n");
+        return;
+    }
+
+    while(fread(&cust, sizeof(struct Customer),1,fp)==1)
+    {
+        if(strcmp(cust.cust_name,dele_cust)!=0)
+        {
+            fwrite(&cust, sizeof(struct Customer),1,tp);
+        }
+        else
+        {
+            found=1;
+        }
+    }
+
+    fclose(fp);
+    fclose(tp);
+
+    if(found==0)
+    {
+        remove("temp.dat");
+        printf("Customer not found!\n");
+    }
+    else
+    {
+        remove("Customer.dat");
+        rename("temp.dat","Customer.dat");
+        printf("Customer deleted Successfully!\n");
     }
 }

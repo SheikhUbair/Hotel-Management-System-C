@@ -17,5 +17,6 @@ void view_cust();
 int roomOccupied(int room);
 void Search_Customer();
 void Update_Room();
+void Delete_Customer();
 
 #endif

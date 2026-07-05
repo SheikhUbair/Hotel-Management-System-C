@@ -45,6 +45,11 @@ while(1)
             Update_Room();
             break;
         }
+        case 5:
+        {
+            Delete_Customer();
+            break;
+        }
     }
 }
 

@@ -12,11 +12,13 @@ struct Customer
     char cust_arrivalDATE[12];
 };
 
+
 void add_Customer();
 void view_cust();
 int roomOccupied(int room);
 void Search_Customer();
 void Update_Room();
 void Delete_Customer();
+void update_checkout();
 
 #endif

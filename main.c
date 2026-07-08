@@ -1,5 +1,6 @@
-#include<stdio.h>
+#include <stdio.h>
 #include "Customer.h"
+#include "Room.h"
 int main ()
 {
     int choice;
@@ -14,11 +15,10 @@ while(1)
     printf("3. Search Customer\n");
     printf("4. Update Room \n");
     printf("5. Delete a customer\n");
-    printf("6. Book room\n");
-    printf("7. View Room status\n");
-    printf("8. Checkout Customer\n");
-    printf("9. Generate Bill\n");
-    printf("10. Exit\n");
+    printf("6. View Room status\n");
+    printf("7. Checkout Customer\n");
+    printf("8. View all Bills\n");
+    printf("9. Exit\n");
     printf("Enter your Choice : ");
     scanf("%d",&choice);
     getchar();
@@ -48,6 +48,17 @@ while(1)
         case 5:
         {
             Delete_Customer();
+            break;
+        }
+        case 6:
+        {
+            view_room();
+            break;
+        }
+        case 7:
+        {
+            checkout_cust();
+            update_checkout();
             break;
         }
     }

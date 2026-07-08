@@ -1,6 +1,7 @@
 #include<stdio.h>
 #include "Customer.h"
 #include <string.h>
+#include "Room.h"
 
 
 void addcust_file(struct Customer cust);
@@ -10,6 +11,7 @@ int roomOccupied(int room);
 void Search_Customer();
 void Update_Room();
 void Delete_Customer();
+void update_checkout();
 
 
 void add_Customer()
@@ -21,6 +23,7 @@ printf("\n----------Enter the details of the Customer-----------\n");
 
 printf("Customer Name : ");
 fgets(cust.cust_name,sizeof(cust.cust_name),stdin);
+cust.cust_name[strcspn(cust.cust_name, "\n")]='\0';
 
 printf("Enter the Customer ID : ");
 fgets(cust.cust_ID,sizeof(cust.cust_ID),stdin);
@@ -105,7 +108,7 @@ void view_cust()
     {
     printf("\n---------------Details of Customer %d------------------\n",count);
     printf("Name of Customer %d : %s",count,cust.cust_name);
-    printf("ID of Customer %d : %s",count,cust.cust_ID);
+    printf("\nID of Customer %d : %s",count,cust.cust_ID);
     printf("Address of Customer %d : %s",count,cust.cust_Address);
     printf("Room assigned to customer %d : %d\n",count,cust.cust_Room);
     printf("No of Persons with Customer %d : %d\n",count,cust.cust_NoOfPerson);
@@ -162,10 +165,10 @@ void Search_Customer()
         if(cust.cust_Room==search_room)
         {
             printf("\nName of Customer : %s",cust.cust_name);
-            printf("ID of Customer : %s",cust.cust_ID);
+            printf("\nID of Customer : %s",cust.cust_ID);
             printf("Address of Customer : %s",cust.cust_Address);
             printf("Room assigned to Customer : %d\n",cust.cust_Room);
-            printf("No. of perons with The Customer : %d\n",cust.cust_NoOfPerson);
+            printf("No. of persons with The Customer : %d\n",cust.cust_NoOfPerson);
             printf("Purpose of visit of Customer : %s",cust.cust_Purpose);
             printf("Arrival Date of the Customer : %s",cust.cust_arrivalDATE);
             found=1;
@@ -259,15 +262,16 @@ void Delete_Customer()
     int found=0;
 
     printf("Customer That needs to be deleted : ");
-     getchar();
     fgets(dele_cust,sizeof(dele_cust),stdin);
     dele_cust[strcspn(dele_cust,"\n")]='\0'; // gets rid of newline
+    
    
     FILE *fp;
     FILE *tp;
 
     fp=fopen("Customer.dat","rb");
     tp=fopen("temp.dat", "wb");
+   
 
     if(fp==NULL)
     {
@@ -282,6 +286,7 @@ void Delete_Customer()
 
     while(fread(&cust, sizeof(struct Customer),1,fp)==1)
     {
+        
         if(strcmp(cust.cust_name,dele_cust)!=0)
         {
             fwrite(&cust, sizeof(struct Customer),1,tp);
@@ -307,3 +312,56 @@ void Delete_Customer()
         printf("Customer deleted Successfully!\n");
     }
 }
+
+    void update_checkout()
+{
+    struct Customer cust;
+    struct Checkout checkout;
+
+    int found=0;
+    FILE *fp;
+    FILE *tp;
+
+    fp=fopen("Customer.dat","rb");
+    tp=fopen("temp.dat", "wb");
+
+    if(fp==NULL)
+    {
+        printf("Unable to open file ! \n");
+        return;
+    }
+    else if(tp==NULL)
+    {
+        printf("Unable to open file ! \n");
+        return;
+    }
+
+    while(fread(&cust, sizeof(struct Customer),1,fp)==1)
+    {
+        if(cust.cust_Room==checkout.room_no)
+        {
+            found=1;
+        }
+        else
+        {
+            fwrite(&cust, sizeof(struct Customer),1,tp);
+        }
+    }
+
+    fclose(fp);
+    fclose(tp);
+
+    if(found==0)
+    {
+        remove("temp.dat");
+        printf("Customer not found!\n");
+    }
+    else
+    {
+        remove("Customer.dat");
+        rename("temp.dat","Customer.dat");
+    }
+}
+
+
+

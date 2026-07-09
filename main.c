@@ -58,7 +58,21 @@ while(1)
         case 7:
         {
             checkout_cust();
-            update_checkout();
+            break;
+        }
+        case 8:
+        {
+            view_bills();
+            break;
+        }
+        case 9:
+        {
+            printf("Exiting Hotel Management System !\n");
+            return 0;
+        }
+        default:
+        {
+            printf("Please choose the correct Option!!!!\n");
             break;
         }
     }

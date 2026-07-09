@@ -19,6 +19,6 @@ int roomOccupied(int room);
 void Search_Customer();
 void Update_Room();
 void Delete_Customer();
-void update_checkout();
+void update_checkout(int room_no);
 
 #endif

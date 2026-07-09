@@ -237,14 +237,16 @@ void checkout_cust()
     
 
     printf("Enter the no of days Till the Customer stayed in the hotel : ");
-    scanf("%d ", &checkout.days);
+    scanf("%d", &checkout.days);
+    getchar();
 
     printf("Enter which Category Room did the Customer select : ");
-    getchar();
     fgets(checkout.room,sizeof(checkout.room),stdin);
+    checkout.room[strcspn(checkout.room, "\n")] = '\0';
 
     printf("Enter the Price of the %s Rooms : ",checkout.room);
-    scanf("%d ", &checkout.price);
+    scanf("%d", &checkout.price);
+    getchar();
 
     checkout.total=checkout.price*checkout.days;
 
@@ -253,11 +255,13 @@ void checkout_cust()
     checkout.GST=checkout.total*5/100;
     checkout.G_total=checkout.total+checkout.GST;
 
-    printf("After 5 percent GST the Grand Total to be paid is : %.2f\n",checkout.G_total);
+    printf("G.Total after 5 percent GST : %.2f\n",checkout.G_total);
 
     checkout_file();
 
     read_checkout();
+
+    update_checkout(checkout.room_no);
 }
 
 void checkout_file()
@@ -281,35 +285,53 @@ void checkout_file()
 
 void read_checkout()
 {
-    FILE *fp;
-    
-    fp=fopen("Checkout.dat","rb");
 
-    if(fp==NULL)
-    {
-        printf("File Unable to open !");
-        return;
-    }
-    
-    while(fread(&checkout, sizeof(struct Checkout),1,fp)==1)
-    {
         printf("\n-------------Generated BILL of Customer-------------\n");
-        printf("Name of Customer : %s",checkout.cust_name);
+        printf("Name of Customer : %s\n",checkout.cust_name);
         printf("Address of Customer : %s",checkout.cust_address);
         printf("Purpose of visit : %s",checkout.cust_purpose);
         printf("No of Persons with the Customer : %d\n",checkout.cust_noofpersons);
-        printf("Category of Room Selected by the Customer : %s",checkout.room);
+        printf("Category of Room Selected by the Customer : %s\n",checkout.room);
         printf("Room no assigned to the Customer : %d\n",checkout.room_no);
         printf("Date of Arrival at the hotel : %s",checkout.arrival_date);
         printf("No of days Stayed at the hotel : %d\n",checkout.days);
         printf("Date of Checkout : %s",checkout.checkout_date);
         printf("Price of %s Room per night : %d\n",checkout.room,checkout.price);
         printf("Total Amount to be paid without GST : %d\n",checkout.total);
-        printf("G.Total After 5 percent GST : %d\n",checkout.G_total);
+        printf("G.Total After 5 percent GST : %.2f\n",checkout.G_total);
         printf("\n");
-    }
-
-    
-    fclose(fp);
+        
 }
 
+void view_bills()
+{
+    int count=1;
+    FILE *fp;
+
+    fp=fopen("Checkout.dat", "rb");
+
+    if(fp==NULL)
+    {
+        printf("File Unable to open!\n");
+        return;
+    }
+
+    while(fread(&checkout ,sizeof(struct Checkout),1,fp)==1)
+    {
+        printf("\n-------------Generated BILL of Customer %d-------------\n",count);
+        printf("Name of Customer %d : %s\n",count,checkout.cust_name);
+        printf("Address of Customer %d : %s",count,checkout.cust_address);
+        printf("Purpose of visit of Customer %d : %s",count,checkout.cust_purpose);
+        printf("No of Persons with the Customer %d : %d\n",count,checkout.cust_noofpersons);
+        printf("Category of Room Selected by the Customer %d : %s\n",count,checkout.room);
+        printf("Room no assigned to the Customer %d : %d\n",count,checkout.room_no);
+        printf("Date of Arrival at the hotel  : %s",checkout.arrival_date);
+        printf("No of days Stayed at the hotel  : %d\n",checkout.days);
+        printf("Date of Checkout : %s",checkout.checkout_date);
+        printf("Price of %s Room per night : %d\n",checkout.room,checkout.price);
+        printf("Total Amount to be paid without GST : %d\n",checkout.total);
+        printf("G.Total After 5 percent GST : %.2f\n",checkout.G_total);
+        printf("\n");
+        count++;
+    }
+}

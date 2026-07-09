@@ -11,7 +11,7 @@ struct Checkout
     int room_no;
     char checkout_date [12];
     int days;
-    char room[20];
+    char room[10];
     int price;
     int total;
     float G_total;
@@ -26,12 +26,7 @@ void Delux_room ();
 void checkout_cust();
 void checkout_file();
 void read_checkout();
-
-
-
-
-
-
+void view_bills();
 
 
 #endif

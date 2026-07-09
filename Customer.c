@@ -11,7 +11,7 @@ int roomOccupied(int room);
 void Search_Customer();
 void Update_Room();
 void Delete_Customer();
-void update_checkout();
+void update_checkout(int room_no);
 
 
 void add_Customer()
@@ -313,10 +313,9 @@ void Delete_Customer()
     }
 }
 
-    void update_checkout()
+    void update_checkout(int room_no)
 {
     struct Customer cust;
-    struct Checkout checkout;
 
     int found=0;
     FILE *fp;
@@ -338,7 +337,7 @@ void Delete_Customer()
 
     while(fread(&cust, sizeof(struct Customer),1,fp)==1)
     {
-        if(cust.cust_Room==checkout.room_no)
+        if(cust.cust_Room==room_no)
         {
             found=1;
         }
